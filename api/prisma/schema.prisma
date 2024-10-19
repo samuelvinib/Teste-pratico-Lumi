@@ -1,14 +1,29 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
 }
 
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
+  url      = env("DATABASE_URL") // Conexão com o banco de dados PostgreSQL
+}
+
+model Fatura {
+  id                          Int      @id @default(autoincrement())
+  numeroCliente               String // Número do cliente
+  mesReferencia               DateTime // Mês da fatura
+  energiaEletricaQuantidade   Float // Quantidade (kWh) de energia elétrica
+  energiaEletricaValor        Float // Valor da energia elétrica (R$)
+  energiaSCEEQuantidade       Float // Quantidade (kWh) de energia SCEEE s/ICMS
+  energiaSCEEValor            Float // Valor de energia SCEEE s/ICMS (R$)
+  energiaCompensadaQuantidade Float // Quantidade (kWh) de energia compensada
+  energiaCompensadaValor      Float // Valor da energia compensada (R$)
+  contribIlumPublicaValor     Float // Valor da contribuição de iluminação pública (R$)
+
+  // Campos calculados
+  consumoTotalEnergiaKWh Float @default(0) // Consumo total de energia (kWh)
+  valorTotalSemGD        Float @default(0) // Valor total sem GD (R$)
+  economiaGD             Float @default(0) // Economia gerada (R$)
+
+  createdAt DateTime @default(now()) // Data de criação
+  updatedAt DateTime @updatedAt // Última atualização
 }

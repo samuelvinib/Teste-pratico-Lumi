@@ -37,9 +37,9 @@ services:
     links:
       - api
   db:
-    image: postgres  # Alterar de mysql para postgres
+    image: postgres
     ports:
-      - "5432:5432"  # Porta padrão do PostgreSQL
+      - "5432:5432"
     restart: always
     environment:
       POSTGRES_USER: lumi
