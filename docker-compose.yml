@@ -1,0 +1,52 @@
+services:
+  api:
+    container_name: lumi-api
+    build:
+      context: ./api
+      dockerfile: Dockerfile
+    environment:
+      CHOKIDAR_USEPOLLING: true
+      NODE_ENV: development
+      SERVER_PORT: 3001
+      POSTGRES_USER: lumi
+      POSTGRES_DB: lumi
+      POSTGRES_PASSWORD: my-secret-pw
+      DATABASE_URL: postgres://lumi:my-secret-pw@db:5432/lumi  # URL de conexão com o PostgreSQL
+    ports:
+      - "3001:3001"
+    volumes:
+      - ./api:/usr/src/api
+      - /usr/src/api/node_modules
+    command: sh -c "until nc -z db 5432; do sleep 1; done && npm run dev"  # Aguarda até que o banco de dados esteja acessível
+    depends_on:
+      - db
+    networks:
+      - my-network
+  app:
+    build:
+      dockerfile: Dockerfile
+      context: ./app
+    environment:
+      CHOKIDAR_USEPOLLING: true
+      FAST_REFRESH: false
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./app:/usr/src/app
+      - /usr/src/app/node_modules
+    links:
+      - api
+  db:
+    image: postgres  # Alterar de mysql para postgres
+    ports:
+      - "5432:5432"  # Porta padrão do PostgreSQL
+    restart: always
+    environment:
+      POSTGRES_USER: lumi
+      POSTGRES_DB: lumi
+      POSTGRES_PASSWORD: my-secret-pw
+    networks:
+      - my-network
+
+networks:
+  my-network:
