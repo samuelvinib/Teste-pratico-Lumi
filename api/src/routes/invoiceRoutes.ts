@@ -14,5 +14,7 @@ const invoiceController = new InvoiceController(invoiceRepository, pdfExtractor)
 // Definindo a rota de upload
 router.post('/invoices',upload.single('file'), (req, res) => invoiceController.uploadPDF(req, res));
 router.get('/invoices', (req, res) => invoiceController.getInvoices(req, res));
+router.get('/invoices/download/:filename', (req, res) => invoiceController.downloadPDF(req, res));
+
 
 export default router;

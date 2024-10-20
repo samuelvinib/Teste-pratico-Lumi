@@ -4,26 +4,26 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL") // Conexão com o banco de dados PostgreSQL
+  url      = env("DATABASE_URL") // URL do banco de dados PostgreSQL
 }
 
-model Fatura {
-  id                          Int      @id @default(autoincrement())
-  numeroCliente               String // Número do cliente
-  mesReferencia               DateTime // Mês da fatura
-  energiaEletricaQuantidade   Float // Quantidade (kWh) de energia elétrica
-  energiaEletricaValor        Float // Valor da energia elétrica (R$)
-  energiaSCEEQuantidade       Float // Quantidade (kWh) de energia SCEEE s/ICMS
-  energiaSCEEValor            Float // Valor de energia SCEEE s/ICMS (R$)
-  energiaCompensadaQuantidade Float // Quantidade (kWh) de energia compensada
-  energiaCompensadaValor      Float // Valor da energia compensada (R$)
-  contribIlumPublicaValor     Float // Valor da contribuição de iluminação pública (R$)
+model Invoice {
+  id                         Int      @id @default(autoincrement())
+  customerNumber             String
+  referenceMonth             DateTime
+  electricEnergyQuantity     Float
+  electricEnergyValue        Float
+  sceeeEnergyQuantity        Float
+  sceeeEnergyValue           Float
+  compensatedEnergyQuantity  Float
+  compensatedEnergyValue     Float
+  publicLightingContribution Float
+  filePath                   String
 
-  // Campos calculados
-  consumoTotalEnergiaKWh Float @default(0) // Consumo total de energia (kWh)
-  valorTotalSemGD        Float @default(0) // Valor total sem GD (R$)
-  economiaGD             Float @default(0) // Economia gerada (R$)
+  // Calculated fields
+  totalEnergyConsumptionKWh Float @default(0) // Calculated: electricEnergyQuantity + sceeeEnergyQuantity
+  totalValueWithoutGD       Float @default(0) // Calculated: electricEnergyValue + sceeeEnergyValue + publicLightingContribution
 
-  createdAt DateTime @default(now()) // Data de criação
-  updatedAt DateTime @updatedAt // Última atualização
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
