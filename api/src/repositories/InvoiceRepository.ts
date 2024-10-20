@@ -1,10 +1,10 @@
 import {Invoice, PrismaClient} from '@prisma/client';
+import prisma from '../../prisma/prisma';
 
 export class InvoiceRepository {
 
     public async saveInvoice(data: Invoice): Promise<Invoice> {  // Nome do método correto
         try {
-            const prisma = new PrismaClient();
             return await prisma.invoice.create({data});
         } catch (error) {
             throw new Error('Erro ao salvar dados: ' + error);

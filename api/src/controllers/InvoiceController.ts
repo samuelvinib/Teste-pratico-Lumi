@@ -25,7 +25,6 @@ export class InvoiceController {
             const filePath = path.join(__dirname, '../../uploads', req.file.filename);
             const result = await this.pdfExtractor.extractData(filePath)
             const invoiceVerifier = await this.invoiceRepository.getInvoices(result);
-            console.log(req.body)
             if (invoiceVerifier.length === 0) {
                 await this.invoiceRepository.saveInvoice(result)
                 res.json({ status: 'sucesso', data: result });

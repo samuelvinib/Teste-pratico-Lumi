@@ -1,5 +1,5 @@
 services:
-  api:
+  api-lumi:
     container_name: lumi-api
     build:
       context: ./api
@@ -23,7 +23,8 @@ services:
       - db
     networks:
       - my-network
-  app:
+  app-lumi:
+    container_name: lumi-app
     build:
       dockerfile: Dockerfile
       context: ./app
@@ -36,7 +37,9 @@ services:
       - ./app:/usr/src/app
 #      - /usr/src/app/node_modules
     links:
-      - api
+      - api-lumi
+    networks:
+      - my-network
   db:
     image: postgres
     ports:
