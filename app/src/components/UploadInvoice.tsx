@@ -28,9 +28,9 @@ const UploadInvoice: React.FC = () => {
             });
             setMessage("Arquivo enviado com sucesso!");
             console.log(response.data);
-        } catch (error) {
-            setMessage("Erro ao enviar o arquivo.");
-            console.error("Erro ao enviar arquivo:", error);
+        } catch (error: any) {
+            setMessage(error.response.data.data);
+            console.error("Erro ao enviar arquivo:", error.response.data.data);
         }
     };
 

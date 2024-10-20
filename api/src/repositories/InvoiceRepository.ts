@@ -1,41 +1,46 @@
-import {Invoice, PrismaClient} from '@prisma/client';
-import prisma from '../../prisma/prisma';
+// src/repositories/InvoiceRepository.ts
+
+import { Invoice, PrismaClient } from '@prisma/client';
+import prisma from '../../prisma/prisma'; // Importando a instância do PrismaClient
 
 export class InvoiceRepository {
-
-    public async saveInvoice(data: Invoice): Promise<Invoice> {  // Nome do método correto
+    public async saveInvoice(data: Invoice): Promise<Invoice> {
         try {
-            return await prisma.invoice.create({data});
+            return await prisma.invoice.create({ data });
         } catch (error) {
             throw new Error('Erro ao salvar dados: ' + error);
         }
     }
 
-    public async getInvoices(data: any): Promise<Invoice[]> {
-
+    public async getInvoices(filters: {
+        customerNumber?: string;
+        referenceMonth?: Date;
+        startDate?: Date;
+        endDate?: Date;
+    }): Promise<Invoice[]> {
         try {
-            const prisma = new PrismaClient();
+            // O prisma já está importado e não precisamos criar uma nova instância aqui
 
             // Construindo o objeto 'where' para filtrar
-            const filters: any = {};
+            const where: any = {};
 
-            if (data.customerNumber) {
-                filters.customerNumber = data.customerNumber.toString();  // Se houver 'cliente', aplica o filtro
+            if (filters.customerNumber) {
+                where.customerNumber = filters.customerNumber.toString();  // Se houver 'cliente', aplica o filtro
             }
 
-            if (data.referenceMonth) {
-                filters.referenceMonth = data.referenceMonth;
+            if (filters.referenceMonth) {
+                where.referenceMonth = filters.referenceMonth;
             }
 
-            if (data.startDate && data.endDate) {
-                filters.referenceMonth = {
-                    gte: new Date(data.startDate),  // Data inicial (maior ou igual)
-                    lte: new Date(data.endDate)     // Data final (menor ou igual)
+            if (filters.startDate && filters.endDate) {
+                where.referenceMonth = {
+                    gte: new Date(filters.startDate),  // Data inicial (maior ou igual)
+                    lte: new Date(filters.endDate)     // Data final (menor ou igual)
                 };
             }
 
             return await prisma.invoice.findMany({
-                where: filters,
+                where,
             });
 
         } catch (error) {

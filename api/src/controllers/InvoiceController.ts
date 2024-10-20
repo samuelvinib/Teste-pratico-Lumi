@@ -31,7 +31,7 @@ export class InvoiceController {
                 return;
             }
             await fs.unlink(filePath);
-            res.status(400).json({ status: 'error', data: "Fatura já salva no sistema" });
+            res.status(400).json({ status: 'error', data: "Fatura já cadastrada" });
         } catch (error) {
             res.status(500).send('Erro ao processar o arquivo: ' + error);
         }

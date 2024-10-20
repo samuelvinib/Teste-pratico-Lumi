@@ -3,7 +3,8 @@
     "types": [
       "node",
       "express",
-      "multer"
+      "multer",
+      "jest"  // Adicionado o Jest aqui
     ],
 
     /* Visit https://aka.ms/tsconfig to read more about this file */
