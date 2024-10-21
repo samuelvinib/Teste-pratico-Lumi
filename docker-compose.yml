@@ -16,7 +16,7 @@ services:
       - "3001:3001"
     volumes:
       - ./api:/usr/src/api
-#      - /usr/src/api/node_modules
+      - /usr/src/api/node_modules
     command: sh -c "until nc -z db 5432; do sleep 1; done && npx prisma db push && npm run dev"
 
     depends_on:
@@ -35,7 +35,7 @@ services:
       - "3000:3000"
     volumes:
       - ./app:/usr/src/app
-#      - /usr/src/app/node_modules
+      - /usr/src/app/node_modules
     links:
       - api-lumi
     networks:
